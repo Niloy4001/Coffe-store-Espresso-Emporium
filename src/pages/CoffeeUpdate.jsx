@@ -1,15 +1,19 @@
 import React from "react";
-import { data, Link } from "react-router-dom";
+import { Link, useLoaderData } from "react-router-dom";
 import Swal from "sweetalert2";
 
-const AddCoffe = () => {
-  const notify = ()=>{
+const CoffeeUpdate = () => {
+  const coffee = useLoaderData();
+  const { _id, name, chef, supplier, taste, category, details, photo } = coffee;
+  //   console.log(name);
+
+  const notify = () => {
     Swal.fire({
-      title: "Successfully Added your coffe",
-      icon: "success"
+      title: "Updated your coffe",
+      icon: "success",
     });
-  }
-  const handleSubmit = (e) => {
+  };
+  const handleUpdate = (e) => {
     e.preventDefault();
     const form = e.target;
     const name = form.name.value;
@@ -22,16 +26,15 @@ const AddCoffe = () => {
 
     const info = { name, chef, supplier, taste, category, details, photo };
 
-    fetch("https://espresso-emporium-server-tau.vercel.app/coffees", {
-      method: "POST",
+    fetch(`https://espresso-emporium-server-tau.vercel.app/coffeeUpdate/${_id}`, {
+      method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(info),
-    }).then((res) => res.json())
+    })
+      .then((res) => res.json())
       .then((data) => {
-        console.log(data)
-        if (data.acknowledged) {
-          form.reset()
-          notify()  
+        if (data.modifiedCount === 1) {
+          notify();
         }
       });
 
@@ -49,7 +52,7 @@ const AddCoffe = () => {
             &larr; Back to home
           </Link>
           <h2 className="text-5xl font-bold text-center mb-4 font-rancho text-[#374151]">
-            Add New Coffee
+            Update Coffee
           </h2>
           <p className="text-gray-500 text-center mb-8">
             It is a long established fact that a reader will be distracted by
@@ -59,11 +62,12 @@ const AddCoffe = () => {
           </p>
           <form
             className="grid grid-cols-1 md:grid-cols-2 gap-6"
-            onSubmit={handleSubmit}
+            onSubmit={handleUpdate}
           >
             <div className="col-span-1">
               <label className="block mb-1 text-gray-700">Name</label>
               <input
+                defaultValue={name}
                 name="name"
                 type="text"
                 placeholder="Enter coffee name"
@@ -73,6 +77,7 @@ const AddCoffe = () => {
             <div className="col-span-1">
               <label className="block mb-1 text-gray-700">Chef</label>
               <input
+                defaultValue={chef}
                 name="chef"
                 type="text"
                 placeholder="Enter coffee chef"
@@ -82,6 +87,7 @@ const AddCoffe = () => {
             <div className="col-span-1">
               <label className="block mb-1 text-gray-700">Supplier</label>
               <input
+                defaultValue={supplier}
                 name="supplier"
                 type="text"
                 placeholder="Enter coffee supplier"
@@ -91,6 +97,7 @@ const AddCoffe = () => {
             <div className="col-span-1">
               <label className="block mb-1 text-gray-700">Taste</label>
               <input
+                defaultValue={taste}
                 name="taste"
                 type="text"
                 placeholder="Enter coffee taste"
@@ -100,6 +107,7 @@ const AddCoffe = () => {
             <div className="col-span-1">
               <label className="block mb-1 text-gray-700">Category</label>
               <input
+                defaultValue={category}
                 name="category"
                 type="text"
                 placeholder="Enter coffee category"
@@ -109,6 +117,7 @@ const AddCoffe = () => {
             <div className="col-span-1">
               <label className="block mb-1 text-gray-700">Details</label>
               <input
+                defaultValue={details}
                 name="details"
                 type="text"
                 placeholder="Enter coffee details"
@@ -118,8 +127,9 @@ const AddCoffe = () => {
             <div className="col-span-1 md:col-span-2">
               <label className="block mb-1 text-gray-700">Photo</label>
               <input
+                defaultValue={photo}
                 name="photo"
-                type="text"
+                type="url"
                 placeholder="Enter photo URL"
                 className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#331A15]"
               />
@@ -129,7 +139,7 @@ const AddCoffe = () => {
                 type="submit"
                 className="bg-[#D2B48C] w-full font-rancho hover:bg-transparent  text-[#331A15] border-2 border-solid border-[#331A15] py-2 px-6 rounded transition duration-200"
               >
-                Add Coffee
+                Update Coffee
               </button>
             </div>
           </form>
@@ -139,4 +149,4 @@ const AddCoffe = () => {
   );
 };
 
-export default AddCoffe;
+export default CoffeeUpdate;

@@ -1,10 +1,14 @@
 import React from 'react'
-import Products from '../components/Products'
+
+import { useLoaderData } from 'react-router-dom'
+import PopularProducts from '../components/PopularProducts'
 
 const Home = () => {
+
+  
   return (
     <div>
-        <Products></Products>
+        <PopularProducts></PopularProducts>
     </div>
   )
 }
